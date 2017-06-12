@@ -33,3 +33,20 @@ class DbClass:
         self.__cursor.execute(sqlCommand)
         self.__connection.commit()
         self.__cursor.close()
+
+    def getNameLights(self):
+        # Query zonder parameters
+        sqlQuery = "SELECT * FROM lichtenbinnen"
+
+        self.__cursor.execute(sqlQuery)
+        result = self.__cursor.fetchall()
+        self.__cursor.close()
+        return result
+
+    def getNameMusic(self):
+        sqlQuery = "SELECT * FROM muziek"
+
+        self.__cursor.execute(sqlQuery)
+        result = self.__cursor.fetchall()
+        self.__cursor.close()
+        return result
