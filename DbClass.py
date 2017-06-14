@@ -5,7 +5,7 @@ class DbClass:
         self.__dsn = {
             "host": "localhost",
             "user": "Arno",
-            "passwd": "Arnoenbobby1998.98",
+            "passwd": "",
             "db": "db_project_secuhome"
         }
 
@@ -50,3 +50,12 @@ class DbClass:
         result = self.__cursor.fetchall()
         self.__cursor.close()
         return result
+
+    def setZonnewering(self, beneden, systeem, wering):
+        sqlQuery = "INSERT INTO datazonnewering(DatumIN, TijdIN, WeringBeneden, Zonnewering, Systeem) VALUES ( CURDATE() ,CURTIME() ,'{param3}','{param4}','{param5}')"
+        # Combineren van de query en parameter
+        sqlCommand = sqlQuery.format(param3=beneden,param4=wering,param5=systeem)
+
+        self.__cursor.execute(sqlCommand)
+        self.__connection.commit()
+        self.__cursor.close()

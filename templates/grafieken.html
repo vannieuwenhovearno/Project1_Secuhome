@@ -6,6 +6,31 @@
     <link rel="stylesheet" href="{{ url_for("static",filename="css/reset.css") }}">
     <link rel="stylesheet" href="{{ url_for("static",filename="css/styleB.css") }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales'],
+          ['2004',  1],
+          ['2005',  0],
+          ['2006',  1],
+          ['20-2-2017',  1]
+        ]);
+
+        var options = {
+          title: 'Company Performance',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
 </head>
 <body class="background">
 <div class="card centered">
@@ -26,6 +51,7 @@
                 <option>Zonnewering</option>
                 <optgroup label="Verlichting">
                     <option>Gelijkvloers</option>
+                    <div id="verlichting gelijkvloers" style="width: 900px; height: 500px"></div>
                     <option>1<sup>ste</sup> verdiep</option>
                 </optgroup>
                 <option>Muziek</option>

@@ -25,10 +25,15 @@
     <div class="container">
         <div id="weather"></div>
         <div class="zonwering">
-            <img class="sunscreen" src="../static/Images/icons/screen.png"/>
+                {% if state == false %}
+                    <img name="licht" class="sunscreen" src="../../static/Images/icons/screen.png">
+                {% else %}
+                    <img name="licht" class="sunscreen" src="../../static/Images/icons/screen2.png">
+                {% endif %}
             <div class="arrows">
-                <p class="arrowUp"><i class="material-icons whiteArrow ">arrow_upward</i></p>
-                <p class="arrowDown"><i class="material-icons whiteArrow ">arrow_downward</i></p>
+                <a href="/zonnewering/up"  class="arrowUp"><p><i class="material-icons whiteArrow ">arrow_upward</i></p></a>
+                <a href="/zonnewering/down"  class="arrowDown"><p><i class="material-icons whiteArrow ">arrow_downward</i></p></a>
+
             </div>
         </div>
     </div>

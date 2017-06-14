@@ -3,21 +3,37 @@ import hashlib
 from DbClass import DbClass
 import os
 import RPi.GPIO as GPIO
+import time
+from datetime import datetime
 
 app = Flask(__name__)
 
 GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
 # Create a dictionary called pins to store the pin number, name, and pin state:
 pins = {
-    18 : {'name' : 'verlichting beneden', 'state' : GPIO.LOW},
+    17 : {'name' : 'verlichting beneden', 'state' : GPIO.LOW},
     24 : {'name' : 'verlichting boven', 'state' : GPIO.LOW},
     12 : {'name': 'muziek', 'state':GPIO.LOW}
    }
 
+delay = 0.0055
+steps = 1000
+
+coil_A_1_pin = 19
+coil_A_2_pin = 13
+coil_B_1_pin = 6
+coil_B_2_pin = 5
+
 for pin in pins:
    GPIO.setup(pin, GPIO.OUT)
    GPIO.output(pin, GPIO.LOW)
+
+GPIO.setup(coil_A_1_pin, GPIO.OUT)
+GPIO.setup(coil_A_2_pin, GPIO.OUT)
+GPIO.setup(coil_B_1_pin, GPIO.OUT)
+GPIO.setup(coil_B_2_pin, GPIO.OUT)
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -164,6 +180,9 @@ def start():
 def zonnewering():
     if 'email' in session:
         mail_session = escape(session['email'])
+        # for pin in axisx:
+        #    GPIO.setup(pin,GPIO.OUT)
+        #    GPIO.output(pin,0)
         return render_template('zonwering.html', mail_session=mail_session)
     return redirect(url_for('login'))
 
@@ -227,7 +246,7 @@ def contact():
     return redirect(url_for('login'))
 
 pins={
-    18: {'name': 'ledGelijkvloers', 'state': GPIO.HIGH},
+    17: {'name': 'ledGelijkvloers', 'state': GPIO.HIGH},
     24: {'name': 'ledVerdiep1', 'state': GPIO.HIGH},
     12 : {'name': 'muziek', 'state':GPIO.HIGH}
 }
@@ -279,6 +298,93 @@ def action(changePin, action):
         return render_template('verlichting.html', mail_session=mail_session, **templateData)
 
     return redirect(url_for('login'))
+
+@app.route("/zonnewering/<actie>")
+def actie(actie):
+    if 'email' in session:
+        mail_session = escape(session['email'])
+
+        if actie == "down":
+            # Convert the pin from the URL into an integer:
+            def setStep(w1, w2, w3, w4):
+                GPIO.output(coil_A_1_pin, w1)
+                GPIO.output(coil_A_2_pin, w2)
+                GPIO.output(coil_B_1_pin, w3)
+                GPIO.output(coil_B_2_pin, w4)
+
+            # loop through step sequence based on number of steps
+
+            for i in range(0, steps):
+                setStep(0, 1, 1, 0)
+                time.sleep(delay)
+                setStep(0, 1, 0, 1)
+                time.sleep(delay)
+                setStep(1, 0, 0, 1)
+                time.sleep(delay)
+                setStep(1, 0, 1, 0)
+                time.sleep(delay)
+
+            database = DbClass()
+            database.setZonnewering(1,1,1)
+            beneden = True
+
+
+        if actie == "up":
+            # Function for step sequence
+
+            def setStep(w1, w2, w3, w4):
+                GPIO.output(coil_A_1_pin, w1)
+                GPIO.output(coil_A_2_pin, w2)
+                GPIO.output(coil_B_1_pin, w3)
+                GPIO.output(coil_B_2_pin, w4)
+
+            # Reverse previous step sequence to reverse motor direction
+
+            for i in range(0, steps):
+                setStep(1, 0, 0, 0)
+                time.sleep(delay)
+                setStep(1, 0, 0, 1)
+                time.sleep(delay)
+                setStep(0, 0, 0, 1)
+                time.sleep(delay)
+                setStep(0, 0, 1, 1)
+                time.sleep(delay)
+                setStep(0, 0, 1, 0)
+                time.sleep(delay)
+                setStep(0, 1, 1, 0)
+                time.sleep(delay)
+                setStep(0, 1, 0, 0)
+                time.sleep(delay)
+                setStep(1, 1, 0, 0)
+                time.sleep(delay)
+
+
+            database = DbClass()
+            database.setZonnewering(0,1,1)
+
+            beneden = False
+
+        templateData = {
+          'state' : beneden
+        }
+
+        return render_template('zonwering.html', mail_session=mail_session, **templateData)
+
+    return redirect(url_for('login'))
+
+# Css refreshen
+
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path,
+                                     endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+    return url_for(endpoint, **values)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT",8080))
