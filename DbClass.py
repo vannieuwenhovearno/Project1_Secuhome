@@ -51,6 +51,15 @@ class DbClass:
         self.__cursor.close()
         return result
 
+    def getNameWering(self):
+        # Query zonder parameters
+        sqlQuery = "SELECT * FROM zonnewering"
+
+        self.__cursor.execute(sqlQuery)
+        result = self.__cursor.fetchall()
+        self.__cursor.close()
+        return result
+
     def setZonnewering(self, beneden, systeem, wering):
         sqlQuery = "INSERT INTO datazonnewering(DatumIN, TijdIN, WeringBeneden, Zonnewering, Systeem) VALUES ( CURDATE() ,CURTIME() ,'{param3}','{param4}','{param5}')"
         # Combineren van de query en parameter
@@ -59,3 +68,15 @@ class DbClass:
         self.__cursor.execute(sqlCommand)
         self.__connection.commit()
         self.__cursor.close()
+
+    def setBinnenverlichting(self,aan, licht, systeem):
+        sqlQuery = "INSERT INTO datalichtin (DatumIN, TijdIN, Aan, LichtBinnen, Systeem) VALUES (CURDATE(), CURTIME(),'{param3}','{param4}','{param5}')"
+        sqlCommand = sqlQuery.format(param3=aan, param4=licht, param5=systeem)
+
+        self.__cursor.execute(sqlCommand)
+        self.__connection.commit()
+        self.__cursor.close()
+
+    def setBuitenverlichting(self, aan,lichtbuiten,systeem):
+        sqlQuery = "INSERT INTO datalichtout (DatumIN,TijdIN,Aan,lichtenbuiten_IDLichtenbuiten, systeem_IDSysteem) VALUES (CURDATE(), CURTIME(),'{param3}','{param4}','{param5}')"
+        sqlCommand = sqlQuery.format(param3)

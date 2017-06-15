@@ -1,10 +1,11 @@
 from flask import Flask, session, redirect, url_for, escape, request, render_template
 import hashlib
-from DbClass import DbClass
 import os
 import RPi.GPIO as GPIO
 import time
-from datetime import datetime
+
+from DbClass import DbClass
+time.sleep(15)
 
 app = Flask(__name__)
 
@@ -84,7 +85,7 @@ def login():
                 print(UserTrying)
 
                 password = password_form
-                salt = "?a4D.&oD8!éM_°"
+                salt = "24mei1998@Aalst"
                 password = password.encode('utf-8')
                 salt = salt.encode('utf-8')
 
@@ -108,7 +109,7 @@ def logout():
     session.pop('email', None)
     return redirect(url_for('home'))
 
-app.secret_key = 'sdh//*gfg4e--z64tg-s68dtu7r8§!4è'
+app.secret_key = 'A0ZrdfedyXdRdXHHrjmNjjLWXpffRT'
 
 @app.route('/registreren' , methods=['GET', 'POST'])
 def registreren():
@@ -126,7 +127,7 @@ def registreren():
             if password_form == passwordConf_form:
 
                 password = password_form
-                salt = "?a4D.&oD8!éM_°"
+                salt = "24mei1998@Aalst"
                 password = password.encode('utf-8')
                 salt = salt.encode('utf-8')
 
@@ -157,12 +158,11 @@ def start():
         database = DbClass()
         listVerlichting = database.getNameLights()
 
-        print(listVerlichting)
-
         database = DbClass()
         listMuziek = database.getNameMusic()
-        print(listMuziek)
 
+        database = DbClass()
+        listMuziek = database.getNameWering()
 
         # For each pin, read the pin state and store it in the pins dictionary:
         for pin in pins:
@@ -171,7 +171,9 @@ def start():
         templateData = {
             'pins': pins,
             'typeLicht': listVerlichting,
-            'typeMuziek': listMuziek
+            'typeMuziek': listMuziek,
+            'typeWering': listWering
+
         }
         return render_template('home.html', mail_session=mail_session, **templateData)
     return redirect(url_for('login'))
@@ -279,9 +281,13 @@ def action(changePin, action):
         if action == "on":
           # Set the pin high:
           GPIO.output(changePin, GPIO.HIGH)
+          database = DbClass()
+          database.setBinnenverlichting(1, 1, 1)
           # Save the status message to be passed into the template:
         if action == "off":
           GPIO.output(changePin, GPIO.LOW)
+          database = DbClass()
+          database.setBinnenverlichting(0, 1, 1)
         if action == "toggle":
           # Read the pin and set it to whatever it isn't (that is, toggle it):
           GPIO.output(changePin, not GPIO.input(changePin))
@@ -372,19 +378,19 @@ def actie(actie):
 
     return redirect(url_for('login'))
 
-# Css refreshen
-
-@app.context_processor
-def override_url_for():
-    return dict(url_for=dated_url_for)
-def dated_url_for(endpoint, **values):
-    if endpoint == 'static':
-        filename = values.get('filename', None)
-        if filename:
-            file_path = os.path.join(app.root_path,
-                                     endpoint, filename)
-            values['q'] = int(os.stat(file_path).st_mtime)
-    return url_for(endpoint, **values)
+# # Css refreshen
+#
+# @app.context_processor
+# def override_url_for():
+#     return dict(url_for=dated_url_for)
+# def dated_url_for(endpoint, **values):
+#     if endpoint == 'static':
+#         filename = values.get('filename', None)
+#         if filename:
+#             file_path = os.path.join(app.root_path,
+#                                      endpoint, filename)
+#             values['q'] = int(os.stat(file_path).st_mtime)
+#     return url_for(endpoint, **values)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT",8080))
