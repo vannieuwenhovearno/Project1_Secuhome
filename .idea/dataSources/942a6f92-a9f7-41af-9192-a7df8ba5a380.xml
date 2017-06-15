@@ -214,33 +214,33 @@
     <table id="80" parent="4" name="user">
       <Comment>Users and global privileges</Comment>
     </table>
-    <column id="81" parent="6" name="IDDataLichtIN">
-      <Position>1</Position>
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-    </column>
-    <column id="82" parent="6" name="DatumIN">
+    <column id="81" parent="6" name="DatumIN">
       <Position>2</Position>
       <DataType>date|0</DataType>
     </column>
-    <column id="83" parent="6" name="TijdIN">
+    <column id="82" parent="6" name="TijdIN">
       <Position>3</Position>
       <DataType>time|0</DataType>
     </column>
-    <column id="84" parent="6" name="Aan">
+    <column id="83" parent="6" name="Aan">
       <Position>4</Position>
       <DataType>tinyint(1)|0</DataType>
     </column>
-    <column id="85" parent="6" name="LichtBinnen">
+    <column id="84" parent="6" name="LichtBinnen">
       <Position>5</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="86" parent="6" name="Systeem">
+    <column id="85" parent="6" name="Systeem">
       <Position>6</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
+    </column>
+    <column id="86" parent="6" name="IDDataLichtIN">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
     </column>
     <index id="87" parent="6" name="fk_datalichtin_lichtenbinnen1_idx">
       <ColNames>LichtBinnen</ColNames>
@@ -249,9 +249,7 @@
       <ColNames>Systeem</ColNames>
     </index>
     <key id="89" parent="6" name="PRIMARY">
-      <ColNames>IDDataLichtIN
-LichtBinnen
-Systeem</ColNames>
+      <ColNames>IDDataLichtIN</ColNames>
       <Primary>1</Primary>
     </key>
     <foreign-key id="90" parent="6" name="fk_datalichtin_lichtenbinnen1">
@@ -338,20 +336,21 @@ systeem_IDSysteem</ColNames>
       <Position>4</Position>
       <DataType>tinyint(1)|0</DataType>
     </column>
-    <column id="106" parent="8" name="IDDataMuziek">
-      <Position>1</Position>
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="107" parent="8" name="Muziek">
+    <column id="106" parent="8" name="Muziek">
       <Position>5</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="108" parent="8" name="Systeem">
+    <column id="107" parent="8" name="Systeem">
       <Position>6</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
+    </column>
+    <column id="108" parent="8" name="IDDataMuziek">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
     </column>
     <index id="109" parent="8" name="fk_datamuziek_systeem1_idx">
       <ColNames>Systeem</ColNames>
@@ -360,9 +359,7 @@ systeem_IDSysteem</ColNames>
       <ColNames>Muziek</ColNames>
     </index>
     <key id="111" parent="8" name="PRIMARY">
-      <ColNames>IDDataMuziek
-Muziek
-Systeem</ColNames>
+      <ColNames>IDDataMuziek</ColNames>
       <Primary>1</Primary>
     </key>
     <foreign-key id="112" parent="8" name="fk_datamuziek_muziek1">

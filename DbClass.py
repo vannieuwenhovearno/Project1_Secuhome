@@ -5,7 +5,7 @@ class DbClass:
         self.__dsn = {
             "host": "localhost",
             "user": "Arno",
-            "passwd": "  ",
+            "passwd": "",
             "db": "db_project_secuhome"
         }
 
@@ -60,7 +60,15 @@ class DbClass:
         self.__cursor.close()
         return result
 
-    def setZonnewering(self, beneden, systeem, wering):
+    def getnameLightOUT(self):
+        sqlQuery = "SELECT * FROM ldr"
+
+        self.__cursor.execute(sqlQuery)
+        result = self.__cursor.fetchall()
+        self.__cursor.close()
+        return result
+
+    def setZonnewering(self, beneden, wering, systeem):
         sqlQuery = "INSERT INTO datazonnewering(DatumIN, TijdIN, WeringBeneden, Zonnewering, Systeem) VALUES ( CURDATE() ,CURTIME() ,'{param3}','{param4}','{param5}')"
         # Combineren van de query en parameter
         sqlCommand = sqlQuery.format(param3=beneden,param4=wering,param5=systeem)
@@ -79,4 +87,16 @@ class DbClass:
 
     def setBuitenverlichting(self, aan,lichtbuiten,systeem):
         sqlQuery = "INSERT INTO datalichtout (DatumIN,TijdIN,Aan,lichtenbuiten_IDLichtenbuiten, systeem_IDSysteem) VALUES (CURDATE(), CURTIME(),'{param3}','{param4}','{param5}')"
-        sqlCommand = sqlQuery.format(param3)
+        sqlCommand = sqlQuery.format(param3=aan, param4=lichtbuiten,param5=systeem)
+
+        self.__cursor.execute(sqlCommand)
+        self.__connection.commit()
+        self.__cursor.close()
+
+    def setMuziek(self,aan, muziek,systeem):
+        sqlQuery ="INSERT INTO datamuziek(DatumIN,TijdIN,Aan,Muziek,Systeem) VALUES (CURDATE(), CURTIME(),'{param3}','{param4}','{param5}')"
+        sqlCommand = sqlQuery.format(param3=aan,param4=muziek,param5=systeem)
+
+        self.__cursor.execute(sqlCommand)
+        self.__connection.commit()
+        self.__cursor.close()
