@@ -5,7 +5,7 @@ class DbClass:
         self.__dsn = {
             "host": "localhost",
             "user": "Arno",
-            "passwd": " ",
+            "passwd": "  ",
             "db": "db_project_secuhome"
         }
 
