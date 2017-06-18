@@ -17,27 +17,28 @@
         <a href="{{ url_for('verlichting')}}">Verlichting</a>
         <a href="{{ url_for('muziek')}}">Muziek</a>
         <a href="{{ url_for('grafieken')}}">Grafieken</a>
-        <a href="{{ url_for('contact')}}" class="CurrentPage">Contact</a>
     </nav>
     <div class="container">
-        <form class="contactform">
-            <label for="name" class="contact-label">Naam</label><br>
-            <input class="contact-field" type="text" id="name" name="name" placeholder="Naam" required><br>
+        <form class="contactform" action="/contact" method="post"><br>
+            <label for="naam" class="contact-label">Naam</label><br>
+            <input class="contact-field " type="text" id="naam" name="naam" placeholder="Naam" required><br>
 
             <label for="email" class="contact-label">E-mail</label><br>
-            <input class="contact-field" type="email" id="email" name="mail" placeholder="E-mail" required><br>
+            <input class="contact-field " type="email" id="email" name="mail" placeholder="E-mail" required><br>
 
-            <label for="email" class="contact-label">Onderwerp</label><br>
-            <input class="contact-field" type="text" id="onderwerp" name="onderwerp" placeholder="Onderwerp" required><br>
+            <label for="onderwerp" class="contact-label">Onderwerp</label><br>
+            <input class="contact-field " type="text" id="onderwerp" name="onderwerp" placeholder="Onderwerp" required><br>
 
-            <label for="message" class="contact-label">Bericht/Vraag</label><br>
-            <textarea class="contact-area" rows="6" id="message" name="message" placeholder="Bericht/Vraag" required></textarea><br>
-            <a href="{{ url_for('#')}}"><input type="submit" title="Button fade orange" class="button btnFade btnOrange" value="Verzenden"></a><br>
+            <label for="bericht" class="contact-label">Bericht/Vraag</label><br>
+            <textarea class="contact-area" rows="3" id="bericht" name="bericht" placeholder="Bericht/Vraag (max. 250 tekens)" required></textarea><br>
+            <input type="submit" title="Button fade orange" class="button btnFade btnOrange btn" value="Verzenden"></a><br>
         </form>
     </div>
     <div class="footer">
         <hr class="line">
         <a href="{{ url_for('logout')}}" class="logout"><i class="material-icons icoontje_uitloggen">exit_to_app</i><p class="uitloggen"> Uitloggen</p></a>
+        <a href="{{ url_for('contact') }}" class="contact">
+            <p class="contact"> Contact</p></a>
         <p class="copyright">&copy; Arno Van Nieuwenhove - All rights reserved.</p>
     </div>
 </div>

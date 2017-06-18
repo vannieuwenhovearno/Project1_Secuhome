@@ -59,6 +59,7 @@
     <div class="cardHome cardRightHome">
         <h1 class="cardHomeTitle cardHomeDownTitle">Buitenverlichting</h1>
                 <p class="LichtenRes">
+
                         {% if pins[21].state == true %}
                             {{ typeLightOUT[0][1] }}: <span class="aan">AAN</span>
                         {% else %}
@@ -70,6 +71,8 @@
         <hr class="line">
         <a href="{{ url_for('logout') }}" class="logout"><i class="material-icons icoontje_uitloggen">exit_to_app</i>
             <p class="uitloggen"> Uitloggen</p></a>
+        <a href="{{ url_for('contact') }}" class="contact">
+            <p class="contact"> Contact</p></a>
         <p class="copyright">&copy; Arno Van Nieuwenhove - All rights reserved.</p>
     </div>
 </div>

@@ -3,38 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>SecuHome - Grafieken</title>
-    <link rel="stylesheet" href="{{ url_for("static",filename="css/reset.css") }}">
-    <link rel="stylesheet" href="{{ url_for("static",filename="css/styleB.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/styleB.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script type="text/javascript" src="{{ url_for('static',filename='js/jquery-3.2.1.js') }}"></script>
+
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
+
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Year', 'Sales'],
-          ['2004',  1],
-          ['2005',  0],
-          ['2006',  1],
-          ['20-2-2017',  1]
-        ]);
+          var counts = new Array();
+          counts += {{ dataGrafiek|tojson }};
+          console.log(counts)
 
-        var options = {
-          title: 'Company Performance',
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
+          var data = google.visualization.arrayToDataTable($.parseJSON(counts), true);
 
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            // Set chart options
+          var options = {'width':500,
+                           'height':275};
 
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
     </script>
+
 </head>
 <body class="background">
 <div class="card centered">
-    <a href="{{ url_for('start')}}"><img class="logo logo-center" src="../static/Images/logo/logo.png"></a>
+    <a href="{{ url_for('start')}}"><img class="logo logo-center" src="{{ url_for('static',filename='Images/logo/logo.png') }}"></a>
     <p class="online"><span class="green">Online</span>: {% if mail_session %}{{ mail_session }}{% endif %}</p>
     <nav>
         <a href="{{ url_for('home')}}">Home</a>
@@ -45,24 +46,21 @@
     </nav>
     <div class="container">
         <div class="lightCardGraph cardLeftGraph">
-            <h1 class="lightTitle">Zonnewering</h1>
-            <img class="imgGraph" src="../static/Images/graph.png">
-            <select class="selectGraph" name="" id="">
-                <option>Zonnewering</option>
-                <optgroup label="Verlichting">
-                    <option>Gelijkvloers</option>
-                    <div id="verlichting gelijkvloers" style="width: 900px; height: 500px"></div>
-                    <option>1<sup>ste</sup> verdiep</option>
-                </optgroup>
-                <option>Muziek</option>
-                <option>Verlichting Buiten</option>
-            </select>
-            <p class="txtGraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultrices magna eleifend posuere scelerisque. In nulla dolor, imperdiet bibendum ultricies quis, malesuada eget velit.</p>
+            <h1 class="lightTitle">Data & statestieken</h1>
+            <div class="floatRight">
+                <a href="/grafiek/zonwering/"><input type="button" class="button btnFade btnOrange btnBreed"  value="Zonnewering"></a><br>
+                <a href="/grafiek/lichten/"><input type="button"  class="button btnFade btnOrange btnBreed" value="lichten"></a><br>
+                <p class="txtGraph" id="textOpties"></p>
+            </div>
+            <div class="floatLeft">
+            <div id="chart_div"></div></div>
         </div>
     </div>
     <div class="footer">
         <hr class="line">
         <a href="{{ url_for('logout')}}" class="logout"><i class="material-icons icoontje_uitloggen">exit_to_app</i><p class="uitloggen"> Uitloggen</p></a>
+        <a href="{{ url_for('contact') }}" class="contact">
+            <p class="contact"> Contact</p></a>
         <p class="copyright">&copy; Arno Van Nieuwenhove - All rights reserved.</p>
     </div>
 </div>

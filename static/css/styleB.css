@@ -8,9 +8,12 @@ body{
     font-family: 'Roboto', sans-serif;
 }
 
-.background{
-    background-image: url("../Images/room.png");
-    background-repeat: no-repeat;
+.background {
+  background: url(../Images/room.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 .card{
     background-color: white;
@@ -117,6 +120,27 @@ a:visited {
     color: #FFF;
     border-radius: 5px;
     border:none;
+}
+
+.btnBreed{
+    width: 400px;
+    height: 100px;
+}
+
+.floatRight{
+    margin-top: 30px;
+    width: 500px;
+    float: right;
+}
+
+.floatLeft{
+    margin-top: 25px;
+    margin-left: 50px;
+    width: 600px;
+    float: left;
+}
+.btnSend{
+    height: 25px !important;
 }
 
 .btnOrange {
@@ -463,6 +487,12 @@ i {
     margin-top: 4%;
     margin-left: 5%;
 }
+.NoData{
+    color:white;
+    margin-top:10%;
+    text-align: center;
+    !important;
+}
 
 /* Contact*/
 
@@ -470,7 +500,7 @@ i {
 .contact-field{
     width: 400px;
     height: 30px;
-    border: inset 1px #393738;
+    border: inset 1px white;
     padding-left: 20px;
     border-radius: 25px;
     margin-top: 5px;
@@ -479,7 +509,7 @@ i {
 
 .contact-area{
     width: 400px;
-    border: inset 1px #393738;
+    border: inset 1px white;
     padding-top: 7.5px;
     padding-left: 20px;
     border-radius: 25px;
@@ -491,4 +521,23 @@ i {
     margin-top: 11%;
     text-align: center;
     align-items: center;
+    background-color: #393738;
+    margin-left:10%;
+    margin-right:10%;
+    border-radius:25px;
+}
+.contact{
+    text-transform: uppercase;
+    position: absolute;
+    text-decoration: none;
+    bottom: 0;
+    right: 115px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+.contact-label{
+    color:white;
+}
+.btn{
+    margin-top: 5px;
 }

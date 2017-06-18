@@ -3,6 +3,7 @@ import hashlib
 import os
 import RPi.GPIO as GPIO
 import time
+import json
 
 print("gestart")
 from DbClass import DbClass
@@ -205,7 +206,11 @@ def muziek():
         for pin in pins:
             pins[pin]['state'] = GPIO.input(pin)
 
+        database = DbClass()
+        dataMusic = database.getDataMuziek()
+
         templateData = {
+            'data': dataMusic,
             'pins': pins
         }
 
@@ -236,8 +241,12 @@ def actionMuziek(veranderPin, actionMuziek):
           pins[pin]['state'] = GPIO.input(pin)
 
 
+        database = DbClass()
+        dataMusic = database.getDataMuziek()
+
         templateData = {
-          'pins' : pins
+            'data': dataMusic,
+            'pins': pins
         }
 
         return render_template('muziek.html', mail_session=mail_session, **templateData)
@@ -246,13 +255,42 @@ def actionMuziek(veranderPin, actionMuziek):
 def grafieken():
     if 'email' in session:
         mail_session = escape(session['email'])
-        return render_template('grafieken.html', mail_session=mail_session)
+
+        database = DbClass();
+        dataGrafiek = database.getDataLichtIN()
+
+        return render_template('grafieken.html', mail_session=mail_session, dataGrafiek=json.dumps(dataGrafiek))
     return redirect(url_for('login'))
 
-@app.route('/contact')
+@app.route("/grafiek/<typeGrafiek>/")
+def buildGrafiek(typeGrafiek):
+    if 'email' in session:
+        mail_session = escape(session['email'])
+
+        if typeGrafiek == "lichten":
+            database = DbClass();
+            dataGrafiek = database.getDataLichtIN()
+
+        if typeGrafiek == "zonwering":
+            database = DbClass();
+            dataGrafiek = database.getDataZon()
+
+        return render_template('grafieken.html', mail_session=mail_session, dataGrafiek=json.dumps(dataGrafiek))
+    return redirect(url_for('login'))
+
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if 'email' in session:
         mail_session = escape(session['email'])
+
+        if request.method == 'POST':
+            db = DbClass()
+            Naam = request.form['naam']
+            Email = request.form['mail']
+            Onderwerp = request.form['onderwerp']
+            Bericht = request.form['bericht']
+            db.toevoegenContact(Naam,Email,Onderwerp,Bericht)
+
         return render_template('contact.html', mail_session=mail_session)
     return redirect(url_for('login'))
 
@@ -290,13 +328,19 @@ def action(changePin, action):
         deviceName = pins[changePin]['name']
 
         if action == "on":
-          GPIO.output(changePin, GPIO.HIGH)
-          database = DbClass()
-          database.setBinnenverlichting(1, 1, 1)
+            GPIO.output(changePin, GPIO.HIGH)
+            database = DbClass()
+            if changePin == 17:
+                database.setBinnenverlichting(1, 1, 1)
+            if changePin == 24:
+                database.setBinnenverlichting(1, 2, 1)
         if action == "off":
           GPIO.output(changePin, GPIO.LOW)
           database = DbClass()
-          database.setBinnenverlichting(0, 1, 1)
+          if changePin == 17:
+              database.setBinnenverlichting(0, 1, 1)
+          if changePin == 24:
+              database.setBinnenverlichting(0, 2, 1)
         if action == "toggle":
           GPIO.output(changePin, not GPIO.input(changePin))
 

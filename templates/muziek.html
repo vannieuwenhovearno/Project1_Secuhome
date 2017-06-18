@@ -31,48 +31,36 @@
         </div>
         <div class="lightCard cardRight history">
             <h1 class="lightTitle">Geschiedenis</h1>
+            {% if data == [] %}
+            <p class="NoData">Geen data om weer te geven</p>
+            {% else %}
             <table class="tblMuziek">
-                <tr>
-                    <th>Tijd</th>
+                <thead>
+                    <th>Status</th>
                     <th>Datum</th>
-                    <th>Stad</th>
+                    <th>Tijd</th>
+                </thead>
+                <tbody>
+                {% for datalijn in data %}
+                    {% if datalijn[3] == 1 %}
+                        <td><span class="aan"><b>Aan</b></span></td>
+                    {% else %}
+                        <td><span class="uit"><b>Paused</b></span></td>
+                    {% endif %}
+                    <td>{{ datalijn[1] }}</td>
+                    <td>{{ datalijn[2] }}</td>
                 </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria A.</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Centro comercial Moctezuma</td>
-                    <td>Francisco C.</td>
-                    <td>Mexico</td>
-                </tr>
-                <tr>
-                    <td>Ernst Handel</td>
-                    <td>Roland M.</td>
-                    <td>Austria</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen B.</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi T.</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni R.</td>
-                    <td>Italy</td>
-                </tr>
+               {% endfor %}
+                </tbody>
             </table>
+            {% endif %}
         </div>
     </div>
     <div class="footer">
         <hr class="line">
         <a href="{{ url_for('logout')}}" class="logout"><i class="material-icons icoontje_uitloggen">exit_to_app</i><p class="uitloggen"> Uitloggen</p></a>
+        <a href="{{ url_for('contact') }}" class="contact">
+            <p class="contact"> Contact</p></a>
         <p class="copyright">&copy; Arno Van Nieuwenhove - All rights reserved.</p>
     </div>
 </div>

@@ -100,3 +100,45 @@ class DbClass:
         self.__cursor.execute(sqlCommand)
         self.__connection.commit()
         self.__cursor.close()
+
+    def getDataLichtIN(self):
+        sqlQuery = "SELECT L.Beschrijving, Count(D.IDDataLichtIN) AS 'aantal' FROM datalichtin AS D JOIN lichtenbinnen AS L ON D.LichtBinnen = L.IDLichtenBinnen GROUP BY L.Beschrijving;"
+
+        self.__cursor.execute(sqlQuery)
+        result = self.__cursor.fetchall()
+        self.__cursor.close()
+        return result
+
+    def getDataMuziekGraph(self):
+        sqlQuery = "SELECT M.Beschrijving, Count(I.IDDataMuziek) AS 'aantal' FROM datamuziek AS I JOIN muziek AS M on I.Muziek = M.IDMuziek GROUP BY M.Beschrijving;"
+
+        self.__cursor.execute(sqlQuery)
+        result = self.__cursor.fetchall()
+        self.__cursor.close()
+        return result
+
+    def getDataZon(self):
+        sqlQuery = "SELECT Z.Beschrijving, Count(D.IDDataZon) AS 'aantal' FROM datazonnewering AS D JOIN zonnewering AS Z ON D.Zonnewering = Z.IDZonnewering GROUP BY Z.Beschrijving"
+
+        self.__cursor.execute(sqlQuery)
+        result = self.__cursor.fetchall()
+        self.__cursor.close()
+        return result
+
+    def getDataMuziek(self):
+        sqlQuery = "SELECT * FROM datamuziek WHERE DatumIN=CURDATE();"
+
+        self.__cursor.execute(sqlQuery)
+        result = self.__cursor.fetchall()
+        self.__cursor.close()
+        return result
+
+    def toevoegenContact(self,naam,email,onderwerp,bericht):
+        # Query met parameters
+        sqlQuery = "INSERT INTO contact(Naam,Email,Onderwerp,Bericht) VALUES('{naam}','{mail}','{onderwerp}','{bericht}')"
+        # Combineren van de query en parameter
+        sqlCommand = sqlQuery.format(naam=naam, mail=email, onderwerp=onderwerp, bericht=bericht)
+        self.__cursor.execute(sqlCommand)
+        self.__connection.commit()
+        self.__cursor.close()
+
